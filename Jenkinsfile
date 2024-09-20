@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the repository
-                git 'https://github.com/mririi/money-tracker.git'
+                git 'https://github.com/mririi/money-tracker-backend.git'
             }
         }
 
@@ -27,7 +27,7 @@ pipeline {
                         string(credentialsId: 'db-password', variable: 'DB_PASSWORD')
                     ]) {
                         // Run Maven build inside Docker container
-                        sh 'docker run --rm -v "$PWD/money-tracker-backend:/workspace" -v "$HOME/.m2:/root/.m2" maven:3.8.3-openjdk-17 mvn -f /workspace/pom.xml clean package -DskipTests -Pprod'
+                        sh 'docker run --rm -v "$PWD:/workspace" -v "$HOME/.m2:/root/.m2" maven:3.8.3-openjdk-17 mvn -f /workspace/pom.xml clean package -DskipTests -Pprod'
                     }
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 // Build the Docker image
-                sh 'docker build -t ${DOCKER_IMAGE}:latest ./money-tracker-backend'
+                sh 'docker build -t ${DOCKER_IMAGE}:latest .'
             }
         }
 
