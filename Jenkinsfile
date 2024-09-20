@@ -16,7 +16,9 @@ pipeline {
                 script {
                     def dockerHome = tool 'docker'
                     env.PATH = "${dockerHome}/bin:${env.PATH}"
+                    sh 'groupadd docker'
                     sh 'usermod -a -G docker jenkins'
+                    sh 'service jenkins restart'
                 }
              }
         }
