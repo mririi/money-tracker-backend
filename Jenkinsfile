@@ -2,31 +2,14 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'mririi/money-tracker-backend'.toLowerCase() // Ensures lowercase image name
+        DOCKER_IMAGE = 'mriri1/money-tracker-backend'.toLowerCase()
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        DB_USER = ''
-        DB_PASSWORD = ''
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'master', url: 'https://github.com/mririi/money-tracker-backend.git'
-            }
-        }
-
-        stage('Build Maven Project') {
-            steps {
-                script {
-                    withCredentials([
-                        string(credentialsId: 'db-user', variable: 'DB_USER'),
-                        string(credentialsId: 'db-password', variable: 'DB_PASSWORD')
-                    ]) {
-                        docker.image('maven:3.8.3-openjdk-17').inside {
-                            sh 'mvn clean package -DskipTests -Pprod'
-                        }
-                    }
-                }
             }
         }
 
