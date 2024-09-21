@@ -22,12 +22,12 @@ pipeline {
                 }
              }
         }
-        stage('Checkout') {
-            steps {
-                // Clone the repository
-                git 'https://github.com/mririi/money-tracker-backend.git'
-            }
-        }
+       stage('Clone Repository') {
+           steps {
+               git branch: 'master',
+                   url: 'https://github.com/mririi/money-tracker-backend.git'
+           }
+       }
 
         stage('Build Maven Project') {
             steps {
