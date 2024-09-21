@@ -1,11 +1,13 @@
 pipeline {
     agent any
+    tools {
+        dockerTool "docker"
+    }
 
     environment {
         // Docker image name
         DOCKER_IMAGE = 'mririi/money-tracker-backend'
         // DockerHub credentials ID stored in Jenkins
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
         DB_USER = ''
         DB_PASSWORD = ''
     }
@@ -13,9 +15,7 @@ pipeline {
     stages {
        stage('Clone Repository') {
            steps {
-               dir('/var/jenkins_home/workspace/money-tracker') {
-                   sh 'git clone -b master https://github.com/mririi/money-tracker-backend.git'
-               }
+               git branch: 'master', url: 'https://github.com/mririi/money-tracker-backend.git'
            }
        }
 
@@ -34,19 +34,20 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage("Build") {
             steps {
-                // Build the Docker image
-                sh 'docker build -t ${DOCKER_IMAGE}:latest .'
+                script {
+                    docker.build('mriri1/${DOCKER_IMAGE}:latest')
+                }
             }
         }
-
-        stage('Push to DockerHub') {
+        stage("Push") {
             steps {
-                // Push the Docker image to DockerHub
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                    sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS'
-                    sh 'docker push ${DOCKER_IMAGE}:latest'
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
+                        docker.image('mriri1/${DOCKER_IMAGE}:latest').push()
+                        docker.image('mriri1/${DOCKER_IMAGE}:latest').push("latest")
+                    }
                 }
             }
         }
