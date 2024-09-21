@@ -13,7 +13,7 @@ pipeline {
     stages {
        stage('Clone Repository') {
            steps {
-               git branch: 'master', url: 'https://github.com/mririi/money-tracker-backend.git'
+               sh 'git clone -b master https://github.com/mririi/money-tracker-backend'
            }
        }
 
