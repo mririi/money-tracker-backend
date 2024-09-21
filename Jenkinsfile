@@ -37,11 +37,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Clean up Docker images to save space on Jenkins
-            sh 'docker rmi ${DOCKER_IMAGE}:latest || true'
-        }
-    }
 }
