@@ -11,21 +11,9 @@ pipeline {
     }
 
     stages {
-        stage('Initialize'){
-            steps{
-                script {
-                    def dockerHome = tool 'docker'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-                    sh 'groupadd docker'
-                    sh 'usermod -a -G docker jenkins'
-                    sh 'service jenkins restart'
-                }
-             }
-        }
        stage('Clone Repository') {
            steps {
-               git branch: 'master',
-                   url: 'https://github.com/mririi/money-tracker-backend.git'
+               git branch: 'master', url: 'https://github.com/mririi/money-tracker-backend.git'
            }
        }
 
