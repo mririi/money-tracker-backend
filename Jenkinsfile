@@ -19,21 +19,6 @@ pipeline {
            }
        }
 
-        stage('Build Maven Project') {
-            steps {
-                script {
-                    // Fetch credentials and set them as environment variables
-                    withCredentials([
-                        string(credentialsId: 'db-user', variable: 'DB_USER'),
-                        string(credentialsId: 'db-password', variable: 'DB_PASSWORD')
-                    ]) {
-                        // Run Maven build inside Docker container
-                        sh 'docker run --rm -v "$PWD:/workspace" -v "$HOME/.m2:/root/.m2" maven:3.8.3-openjdk-17 mvn -f /workspace/pom.xml clean package -DskipTests -Pprod'
-                    }
-                }
-            }
-        }
-
         stage("Build") {
             steps {
                 script {
