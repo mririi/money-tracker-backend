@@ -48,12 +48,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            script {
-                docker.image("${DOCKER_IMAGE}:latest").remove()
-            }
-        }
-    }
 }
