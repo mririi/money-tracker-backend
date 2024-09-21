@@ -3,6 +3,6 @@ environment:
 spring:
   datasource:
     url: jdbc:postgresql://dpg-crhk83btq21c73futje0-a:5432/money_tracker_8ifs
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    username: root
+    password: lBjz63QTQlR22KAVjYGuMPc1AVrCYYcL
     driver-class-name: org.postgresql.Driver

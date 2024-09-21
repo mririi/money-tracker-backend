@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TransactionPostDto {
     private Double amount;
-    private String category;
-    private TransactionTypeEnum type;
     private String date;
     private String comment;
+    private int category;
     private int profileId;
 }

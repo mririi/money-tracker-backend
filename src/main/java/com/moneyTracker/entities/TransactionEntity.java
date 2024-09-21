@@ -1,7 +1,5 @@
 package com.moneyTracker.entities;
 
-
-import com.moneyTracker.enums.TransactionTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,12 +22,12 @@ public class TransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double amount;
-    private String category;
-    @Enumerated(EnumType.STRING)
-    private TransactionTypeEnum type;
     private LocalDate date;
     private String comment;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private CategoryEntity category;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private ProfileEntity profileEntity;
 }

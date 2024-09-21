@@ -2,6 +2,7 @@ package com.moneyTracker.services;
 
 import com.moneyTracker.dtos.TransactionPatchDto;
 import com.moneyTracker.dtos.TransactionPostDto;
+import com.moneyTracker.entities.CategoryEntity;
 import com.moneyTracker.entities.ProfileEntity;
 import com.moneyTracker.entities.TransactionEntity;
 import com.moneyTracker.enums.TransactionTypeEnum;
@@ -19,12 +20,13 @@ import java.util.Set;
 public class TransactionService {
     private final TransactionJpaRepository transactionJpaRepository;
 
+    //todo
     public TransactionEntity createTransaction(TransactionPostDto transactionPostDto) {
         ProfileEntity profileEntity = ProfileEntity.builder().id(transactionPostDto.getProfileId()).build();
+
         TransactionEntity transactionEntity = TransactionEntity.builder()
                 .amount(transactionPostDto.getAmount())
-                .category(transactionPostDto.getCategory())
-                .type(transactionPostDto.getType())
+                .category(null)
                 .date(LocalDate.parse(transactionPostDto.getDate()))
                 .comment(transactionPostDto.getComment())
                 .profileEntity(profileEntity).build();
@@ -48,12 +50,12 @@ public class TransactionService {
         return totalAmount != null ? totalAmount : 0.0 ;
     }
 
+    //todo
     public TransactionEntity updateTransaction(long id, TransactionPatchDto transactionPatchDto) {
         TransactionEntity transactionEntity = transactionJpaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
         transactionEntity.setAmount(transactionPatchDto.getAmount());
-        transactionEntity.setCategory(transactionPatchDto.getCategory());
-        transactionEntity.setType(transactionPatchDto.getType());
+        transactionEntity.setCategory(null);
         transactionEntity.setDate(LocalDate.parse(transactionPatchDto.getDate()));
         transactionEntity.setComment(transactionPatchDto.getComment());
         return transactionJpaRepository.save(transactionEntity);
