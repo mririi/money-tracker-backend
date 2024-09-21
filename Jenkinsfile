@@ -13,11 +13,9 @@ pipeline {
     stages {
        stage('Clone Repository') {
            steps {
-               checkout([
-                   $class: 'GitSCM',
-                   branches: [[name: '*/master']],
-                   userRemoteConfigs: [[url: 'https://github.com/mririi/money-tracker-backend.git']]
-               ])
+               dir('/var/jenkins_home/workspace/money-tracker') {
+                   sh 'git clone -b master https://github.com/mririi/money-tracker-backend.git'
+               }
            }
        }
 
