@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        dockerTool docker
-    }
-
     environment {
         DOCKER_IMAGE = 'mriri1/money-tracker-backend'.toLowerCase()
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
