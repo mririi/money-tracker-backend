@@ -20,17 +20,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:latest")
+                    sh 'docker build -t ${DOCKER_IMAGE}:latest .'
                 }
             }
         }
 
         stage('Push to DockerHub') {
             steps {
-                script {
-                    docker.withRegistry('', "${DOCKER_CREDENTIALS_ID}") {
-                        docker.image("${DOCKER_IMAGE}:latest").push()
-                    }
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                    sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS'
+                    sh 'docker push ${DOCKER_IMAGE}:latest'
                 }
             }
         }
