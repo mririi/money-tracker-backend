@@ -21,10 +21,18 @@ pipeline {
             }
         }
 
+        stage('Docker Login') {
+            steps {
+                script {
+                    // Log into DockerHub using Docker CLI
+                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
+                }
+            }
+        }
         stage('Push to DockerHub') {
             steps {
-                docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
-                    docker.image("${IMAGE_NAME}:${IMAGE_TAG}").push()
+                script {
+                    sh "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
