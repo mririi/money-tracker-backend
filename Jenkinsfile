@@ -29,7 +29,7 @@ pipeline {
                         sh "echo ${DOCKERHUB_PASS} | docker login -u ${DOCKERHUB_USER} --password-stdin"
 
                         // Push the image
-                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
 
                         // Logout from DockerHub
                         sh "docker logout"
