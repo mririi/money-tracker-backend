@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'mriri1/money-tracker-backend'.toLowerCase()
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKER_CREDENTIALS_ID = credentials('dockerhub-credentials')
     }
 
     stages {
