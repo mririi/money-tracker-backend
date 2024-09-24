@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'mriri1/money-tracker-backend'.toLowerCase()
-        DOCKER_CREDENTIALS_ID = credentials('dockerhub-credentials')
     }
 
     stages {
@@ -21,18 +20,20 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
+        stage('Docker Login and Push') {
             steps {
                 script {
-                    // Log into DockerHub using Docker CLI
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-                }
-            }
-        }
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    // Use withCredentials block to access username and password
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                        // Login to DockerHub
+                        sh "echo ${DOCKERHUB_PASS} | docker login -u ${DOCKERHUB_USER} --password-stdin"
+
+                        // Push the image
+                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+
+                        // Logout from DockerHub
+                        sh "docker logout"
+                    }
                 }
             }
         }
