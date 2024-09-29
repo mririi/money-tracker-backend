@@ -27,5 +27,7 @@ public class CategoryEntity {
     private TransactionTypeEnum type;
     @OneToMany(mappedBy = "category")
     private Set<TransactionEntity> transactions;
-
+    @ManyToOne
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private ProfileEntity profileEntity;
 }

@@ -30,6 +30,10 @@ public class AuthenticationService {
   private final ProfileService profileService;
 
   public AuthenticationResponse register(RegisterRequest request) {
+    String email = request.getEmail();
+    if (repository.existsByEmail(email)) {
+      throw new RuntimeException("Email already exists");
+    }
     var user = User.builder()
         .firstname(request.getFirstname())
         .lastname(request.getLastname())

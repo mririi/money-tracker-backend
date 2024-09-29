@@ -2,16 +2,12 @@ package com.moneyTracker.services;
 
 import com.moneyTracker.dtos.TransactionPatchDto;
 import com.moneyTracker.dtos.TransactionPostDto;
-import com.moneyTracker.entities.CategoryEntity;
-import com.moneyTracker.entities.ProfileEntity;
 import com.moneyTracker.entities.TransactionEntity;
-import com.moneyTracker.enums.TransactionTypeEnum;
 import com.moneyTracker.repositories.TransactionJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,14 +18,11 @@ public class TransactionService {
 
     //todo
     public TransactionEntity createTransaction(TransactionPostDto transactionPostDto) {
-        ProfileEntity profileEntity = ProfileEntity.builder().id(transactionPostDto.getProfileId()).build();
-
         TransactionEntity transactionEntity = TransactionEntity.builder()
                 .amount(transactionPostDto.getAmount())
                 .category(null)
                 .date(LocalDate.parse(transactionPostDto.getDate()))
-                .comment(transactionPostDto.getComment())
-                .profileEntity(profileEntity).build();
+                .comment(transactionPostDto.getComment()).build();
         return transactionJpaRepository.save(transactionEntity);
     }
 
@@ -41,13 +34,8 @@ public class TransactionService {
         transactionJpaRepository.deleteById(id);
     }
 
-    public Set<TransactionEntity> getTransactionsByProfileId(int profileId) {
-        return new HashSet<>(transactionJpaRepository.findByProfileEntityId(profileId));
-    }
-
-    public Double getTotalAmount(int id, TransactionTypeEnum type) {
-        Double totalAmount = transactionJpaRepository.sumAmountByProfileEntityIdAndType(id, type);
-        return totalAmount != null ? totalAmount : 0.0 ;
+    public Set<TransactionEntity> getTransactionsByCategoryId(int categoryId) {
+        return new HashSet<>(transactionJpaRepository.findByCategoryId(categoryId));
     }
 
     //todo
