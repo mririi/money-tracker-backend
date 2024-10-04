@@ -1,5 +1,6 @@
 package com.moneyTracker.services;
 
+import com.moneyTracker.dtos.CategoryPatchDto;
 import com.moneyTracker.dtos.CategoryPostDto;
 import com.moneyTracker.entities.CategoryEntity;
 import com.moneyTracker.entities.ProfileEntity;
@@ -31,8 +32,13 @@ public class CategoryService {
         return categoryJpaRepository.save(categoryEntity);
     }
 
-    public void update(CategoryEntity category) {
-        categoryJpaRepository.save(category);
+    public void update(Integer id, CategoryPatchDto category) {
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        categoryEntity.setName(category.getName());
+        categoryEntity.setType(category.getType());
+        categoryEntity.setTotal(category.getTotal());
+        categoryJpaRepository.save(categoryEntity);
     }
 
     public List<CategoryEntity> getCategories(int profileId){

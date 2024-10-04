@@ -1,6 +1,7 @@
 package com.moneyTracker.controllers;
 
 import com.moneyTracker.dtos.CategoryGetDto;
+import com.moneyTracker.dtos.CategoryPatchDto;
 import com.moneyTracker.dtos.CategoryPostDto;
 import com.moneyTracker.entities.CategoryEntity;
 import com.moneyTracker.enums.TransactionTypeEnum;
@@ -19,6 +20,11 @@ public class CategoryController {
     @PostMapping
     public CategoryEntity createTransaction(@RequestBody CategoryPostDto categoryEntity) {
         return categoryService.create(categoryEntity);
+    }
+
+    @PatchMapping("/{id}")
+    public void updateCategory(@PathVariable("id") final Integer id, @RequestBody CategoryPatchDto categoryPatchDto) {
+        categoryService.update(id, categoryPatchDto);
     }
 
     @GetMapping("/{profileId}")
